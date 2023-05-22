@@ -19,9 +19,28 @@ void	error(t_base *base, int code)
 		printf("Nombre d'argument incorrect !\n");
 }
 
+void	message(t_philo *philo, int code, long int time)
+{
+	pthread_mutex_lock(&philo->base->print_mutex);
+	if (code == 1)
+		printf("MS %d has taken a fork\n", philo->num_philo);
+	else if (code == 2)
+		printf("\033[32;1m%lu %d is eating\n\033[0m", philo->last_eat, philo->num_philo);
+	else if (code == 3)
+		printf("\033[34;1mMS %d is sleeping\n\033[0m", philo->num_philo);
+	else if (code == 4)
+		printf("\033[33;1mMS %d is thinking\n\033[0m", philo->num_philo);
+	else if (code == 5)
+		printf("\033[31;1m%lu %d died\n\033[0m", time, philo->num_philo);
+	else if (code == 6)
+		printf("MS %d has laid a fork\n", philo->num_philo);
+	pthread_mutex_unlock(&philo->base->print_mutex);
+}
+
 int	main(int argc, char **argv)
 {
 	t_philo		*philo;
+	t_philo		*philo_start;
 	t_base		*base;
 	int			i;
 
@@ -29,13 +48,15 @@ int	main(int argc, char **argv)
 	base = ft_calloc(1, sizeof(t_base));
 	if (check_args(base, argc, argv) == 0)
 		return (0);
-	philo = new_thread(1);
+	pthread_mutex_init(&base->print_mutex, NULL);
+	philo = new_thread(base, NULL, 1);
+	philo_start = philo;
 	while (i < base->nbr_philo)
 	{
-		add_thread(philo, i + 1);
+		add_thread(base, philo, philo_start, i + 1);
 		i++;
 	}
-	while (1);
+	while (check_final(philo_start, base));
 	return (1);
 }
 

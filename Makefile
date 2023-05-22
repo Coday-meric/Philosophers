@@ -7,12 +7,17 @@ SRC = main.c $(INCCORE)checker.c $(INCCORE)thread.c $(INCMYUTILS)ft_atoi.c $(INC
 
 FLAG = -Wall -Werror -Wextra -pthread
 
+BUG = -fsanitize=address
+
 OBJ = $(SRC:%.c=%.o)
 
 all: $(NAME)
 
 $(NAME):	$(OBJ)
 		gcc $(FLAG) -o $(NAME) $(OBJ)
+
+debug:
+	gcc $(BUG) $(FLAG) -o $(NAME) $(OBJ)
 
 clean:
 	rm -rf *.o
