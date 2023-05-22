@@ -10,7 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "philo.h"
 
 void	error(t_base *base, int code)
@@ -23,17 +22,15 @@ void	message(t_philo *philo, int code, long int time)
 {
 	pthread_mutex_lock(&philo->base->print_mutex);
 	if (code == 1)
-		printf("MS %d has taken a fork\n", philo->num_philo);
+		printf("%lu %d has taken a fork\n", (time - philo->base->time_start), philo->num_philo);
 	else if (code == 2)
-		printf("\033[32;1m%lu %d is eating\n\033[0m", philo->last_eat, philo->num_philo);
+		printf("\033[32;1m%lu %d is eating\n\033[0m", (time - philo->base->time_start), philo->num_philo);
 	else if (code == 3)
-		printf("\033[34;1mMS %d is sleeping\n\033[0m", philo->num_philo);
+		printf("\033[34;1m%lu %d is sleeping\n\033[0m", (time - philo->base->time_start), philo->num_philo);
 	else if (code == 4)
-		printf("\033[33;1mMS %d is thinking\n\033[0m", philo->num_philo);
+		printf("\033[33;1m%lu %d is thinking\n\033[0m", (time - philo->base->time_start), philo->num_philo);
 	else if (code == 5)
-		printf("\033[31;1m%lu %d died\n\033[0m", time, philo->num_philo);
-	else if (code == 6)
-		printf("MS %d has laid a fork\n", philo->num_philo);
+		printf("\033[31;1m%lu %d died\n\033[0m", (time - philo->base->time_start), philo->num_philo);
 	pthread_mutex_unlock(&philo->base->print_mutex);
 }
 
@@ -49,6 +46,8 @@ int	main(int argc, char **argv)
 	if (check_args(base, argc, argv) == 0)
 		return (0);
 	pthread_mutex_init(&base->print_mutex, NULL);
+	base->died = 0;
+	base->time_start = timestamp();
 	philo = new_thread(base, NULL, 1);
 	philo_start = philo;
 	while (i < base->nbr_philo)
@@ -56,8 +55,7 @@ int	main(int argc, char **argv)
 		add_thread(base, philo, philo_start, i + 1);
 		i++;
 	}
-	while (check_final(philo_start, base));
+	while (check_final(philo_start, base) == 1 && check_die(philo) == 1);
+
 	return (1);
 }
-
-

@@ -10,11 +10,13 @@
 typedef struct s_base
 {
 	pthread_mutex_t	print_mutex;
+	long int		time_start;
 	int				nbr_philo;
 	int				time_die;
 	int				time_eat;
 	int				time_sleep;
 	int				nbr_max_eat;
+	int				died;
 }	t_base;
 
 typedef struct s_philo
@@ -43,14 +45,16 @@ void	error(t_base *base, int code);
 void	message(t_philo *philo, int code, long int time);
 
 //UTILS
-int		ft_atoi(const char *nptr);
-int		ft_isdigit(int c);
-int		check_final(t_philo *philo, t_base *base);
-int		check_die(t_philo *philo);
-void	ft_putstr_fd(char *s, int fd);
-void	ft_putnbr_fd(int n, int fd);
-void	ft_putchar_fd(char c, int fd);
-void	ft_bzero(void *s, size_t n);
-void	*ft_calloc(size_t ec, size_t es);
+int			ft_atoi(const char *nptr);
+int			ft_isdigit(int c);
+int			check_final(t_philo *philo, t_base *base);
+int			check_die(t_philo *philo);
+void		ft_putstr_fd(char *s, int fd);
+void		ft_putnbr_fd(int n, int fd);
+void		ft_putchar_fd(char c, int fd);
+void		ft_bzero(void *s, size_t n);
+void		*ft_calloc(size_t ec, size_t es);
+long int	timestamp(void);
+void	improve_usleep(long int time, t_base *base);
 
 #endif //PHILO_H

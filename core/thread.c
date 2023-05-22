@@ -5,9 +5,9 @@
 static void	fork_l(t_philo *philo)
 {
 	pthread_mutex_lock(&philo->fork_mutex);
-	if (philo->fork == 0)
+	if (philo->fork == 0 && philo->base->died == 0)
 	{
-		message(philo, 1);
+		message(philo, 1, timestamp());
 		philo->fork = 1;
 		philo->nbr_fork = philo->nbr_fork + 1;
 	}
@@ -25,9 +25,9 @@ static void	fork_r(t_philo *philo)
 
 	pthread_mutex_lock(&philo_next->fork_mutex);
 
-	if (philo_next->fork == 0)
+	if (philo_next->fork == 0 && philo->base->died == 0)
 	{
-		message(philo, 1);
+		message(philo, 1, timestamp());
 		philo_next->fork = 1;
 		philo->nbr_fork = philo->nbr_fork + 1;
 	}
@@ -46,7 +46,6 @@ static void	fork_r_out(t_philo *philo)
 	pthread_mutex_lock(&philo_next->fork_mutex);
 	if (philo_next->fork == 1)
 	{
-		message(philo, 6);
 		philo_next->fork = 0;
 		philo->nbr_fork = philo->nbr_fork - 1;
 	}
@@ -58,7 +57,6 @@ static void	fork_l_out(t_philo *philo)
 	pthread_mutex_lock(&philo->fork_mutex);
 	if (philo->fork == 1)
 	{
-		message(philo, 6);
 		philo->fork = 0;
 		philo->nbr_fork = philo->nbr_fork - 1;
 	}
@@ -67,45 +65,42 @@ static void	fork_l_out(t_philo *philo)
 
 static void	got_to_sleep(t_philo *philo)
 {
-	message(philo, 3);
 	philo->state = 2;
-	usleep(philo->base->time_sleep);
+	message(philo, 3, timestamp());
+	improve_usleep(philo->base->time_sleep, philo->base);
 }
 
 static void	got_to_think(t_philo *philo)
 {
-	message(philo, 4);
 	philo->state = 3;
+	message(philo, 4, timestamp());
 }
 
 void	*thread_routine(void *data)
 {
-	struct timeval	tv;
 	t_philo			*philo;
 	t_base			*base;
 
 	philo = (t_philo *)data;
 	base = philo->base;
 	philo->pid = pthread_self();
-	gettimeofday(&tv, NULL);
-	philo->last_eat = tv.tv_usec;
-	pthread_mutex_lock(&base->print_mutex);
-	printf("Nomre Total philo : %d, Thread Numero : %lu, Philo Numero : %d, Philo last eat : %lu\n", base->nbr_philo, philo->pid, philo->num_philo, philo->last_eat);
-	pthread_mutex_unlock(&base->print_mutex);
-	usleep(1000);
-	while (check_die(philo))
+	//pthread_mutex_lock(&base->print_mutex);
+	//printf("Nomre Total philo : %d, Thread Numero : %lu, Philo Numero : %d, Philo last eat : %lu\n", base->nbr_philo, philo->pid, philo->num_philo, philo->last_eat);
+	//pthread_mutex_unlock(&base->print_mutex);
+	if (philo->num_philo % 2 == 0)
+		usleep(15000);
+
+	while (base->died == 0)
 	{
 		fork_l(philo);
 		fork_r(philo);
-
 		if (philo->nbr_fork == 2)
 		{
-			message(philo, 2);
 			philo->state = 1;
-			usleep(philo->base->time_eat);
-			gettimeofday(&tv, NULL);
-			philo->last_eat = tv.tv_usec;
 			philo->nbr_eat = philo->nbr_eat + 1;
+			message(philo, 2, timestamp());
+			philo->last_eat = timestamp();
+			improve_usleep(base->time_eat, base);
 			fork_l_out(philo);
 			fork_r_out(philo);
 			got_to_sleep(philo);
@@ -117,15 +112,14 @@ void	*thread_routine(void *data)
 
 t_philo	*new_thread(t_base *base, t_philo *philo_start, int nbr)
 {
-	struct timeval	tv;
 	t_philo			*philo;
 
 	philo = ft_calloc(1, sizeof(t_philo));
-	gettimeofday(&tv, NULL);
 	philo->num_philo = nbr;
 	philo->base = base;
 	philo->fork = 0;
 	philo->state = 0;
+	philo->last_eat = timestamp();
 	philo->next = NULL;
 	if (philo_start != NULL)
 		philo->start = philo_start;

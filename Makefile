@@ -3,7 +3,7 @@ INCCORE=./core/
 
 NAME = philo
 
-SRC = main.c $(INCCORE)checker.c $(INCCORE)thread.c $(INCMYUTILS)ft_atoi.c $(INCMYUTILS)ft_calloc.c $(INCMYUTILS)ft_bzero.c $(INCMYUTILS)ft_isdigit.c $(INCMYUTILS)ft_putchar_fd.c $(INCMYUTILS)ft_putstr_fd.c $(INCMYUTILS)ft_putnbr_fd.c
+SRC = main.c $(INCCORE)checker.c $(INCCORE)thread.c $(INCMYUTILS)utils.c $(INCMYUTILS)ft_atoi.c $(INCMYUTILS)ft_calloc.c $(INCMYUTILS)ft_bzero.c $(INCMYUTILS)ft_isdigit.c $(INCMYUTILS)ft_putchar_fd.c $(INCMYUTILS)ft_putstr_fd.c $(INCMYUTILS)ft_putnbr_fd.c
 
 FLAG = -Wall -Werror -Wextra -pthread
 
