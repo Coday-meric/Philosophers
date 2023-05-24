@@ -55,7 +55,8 @@ int	main(int argc, char **argv)
 		add_thread(base, philo, philo_start, i + 1);
 		i++;
 	}
-	while (check_final(philo_start, base) == 1 && check_die(philo) == 1);
-
+	while (check_final(philo_start, base) == 1 && check_die(philo) == 1)
+	{
+	}
 	return (1);
 }
