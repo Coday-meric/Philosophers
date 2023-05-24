@@ -34,6 +34,28 @@ void	message(t_philo *philo, int code, long int time)
 	pthread_mutex_unlock(&philo->base->print_mutex);
 }
 
+void clean(t_base *base, t_philo *philo_start)
+{
+	t_philo	*philo_tmp;
+	t_philo	*philo;
+
+	philo = philo_start;
+	while (philo)
+	{
+		pthread_join(philo->pid, NULL);
+		philo = philo->next;
+	}
+
+	philo = philo_start;
+	while (philo)
+	{
+		philo_tmp = philo->next;
+		free(philo);
+		philo = philo_tmp;
+	}
+	free(base);
+}
+
 int	main(int argc, char **argv)
 {
 	t_philo		*philo;
@@ -57,6 +79,8 @@ int	main(int argc, char **argv)
 	}
 	while (check_final(philo_start, base) == 1 && check_die(philo) == 1)
 	{
+		usleep(1000);
 	}
+	clean(base, philo_start);
 	return (1);
 }

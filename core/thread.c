@@ -65,6 +65,8 @@ static void	fork_l_out(t_philo *philo)
 
 static void	got_to_sleep(t_philo *philo)
 {
+	if (philo->base->died == 1)
+		return ;
 	philo->state = 2;
 	message(philo, 3, timestamp());
 	improve_usleep(philo->base->time_sleep, philo->base);
@@ -72,6 +74,8 @@ static void	got_to_sleep(t_philo *philo)
 
 static void	got_to_think(t_philo *philo)
 {
+	if (philo->base->died == 1)
+		return ;
 	philo->state = 3;
 	message(philo, 4, timestamp());
 }
@@ -94,7 +98,7 @@ void	*thread_routine(void *data)
 	{
 		fork_l(philo);
 		fork_r(philo);
-		if (philo->nbr_fork == 2)
+		if (philo->nbr_fork == 2 && philo->base->died == 0)
 		{
 			philo->state = 1;
 			philo->nbr_eat = philo->nbr_eat + 1;
