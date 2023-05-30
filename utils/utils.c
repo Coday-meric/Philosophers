@@ -29,6 +29,6 @@ void	improve_usleep(long int time, t_base *base)
 	{
 		if (timestamp() - i >= time)
 			break ;
-		usleep(1000);
+		usleep(250);
 	}
 }

@@ -21,6 +21,7 @@
 typedef struct s_base
 {
 	pthread_mutex_t	print_mutex;
+	pthread_mutex_t	die_mutex;
 	long int		time_start;
 	int				nbr_philo;
 	int				time_die;
