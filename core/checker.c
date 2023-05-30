@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   checker.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: amaisonn <amaisonn@student.42perpignan.f>  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/05/30 07:43:46 by amaisonn          #+#    #+#             */
+/*   Updated: 2023/05/30 07:43:46 by amaisonn         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../philo.h"
 
@@ -38,10 +49,7 @@ int	check_final(t_philo *philo, t_base *base)
 	while (philo_loc)
 	{
 		if (check_die(philo) == 0)
-		{
-			base->died = 1;
-			return (0);
-		}
+			return (base->died = 1, 0);
 		if (base->nbr_max_eat != -1)
 			if (philo_loc->nbr_eat >= base->nbr_max_eat)
 				i++;
@@ -50,10 +58,7 @@ int	check_final(t_philo *philo, t_base *base)
 	if (base->nbr_max_eat != -1)
 	{
 		if (i == base->nbr_philo)
-		{
-			base->died = 1;
-			return (0);
-		}
+			return (base->died = 1, 0);
 	}
 	return (1);
 }
