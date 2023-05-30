@@ -35,9 +35,14 @@ void	add_thread(t_base *base, t_philo *philo, t_philo *philo_start, int nbr)
 {
 	while (philo)
 	{
+		pthread_mutex_lock(&philo->fork_mutex);
 		if (!philo->next)
+		{
+			pthread_mutex_unlock(&philo->fork_mutex);
 			break ;
+		}
 		philo = philo->next;
+		pthread_mutex_unlock(&philo->fork_mutex);
 	}
 	philo->next = new_thread(base, philo_start, nbr);
 }

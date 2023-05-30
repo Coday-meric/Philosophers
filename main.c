@@ -72,6 +72,7 @@ int	main(int argc, char **argv)
 	if (check_args(base, argc, argv) == 0)
 		return (0);
 	pthread_mutex_init(&base->print_mutex, NULL);
+	pthread_mutex_init(&base->die_mutex, NULL);
 	base->died = 0;
 	base->time_start = timestamp();
 	philo = new_thread(base, NULL, 1);
