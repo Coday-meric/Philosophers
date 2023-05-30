@@ -20,7 +20,6 @@ t_philo	*new_thread(t_base *base, t_philo *philo_start, int nbr)
 	philo->num_philo = nbr;
 	philo->base = base;
 	philo->fork = 0;
-	philo->state = 0;
 	philo->last_eat = timestamp();
 	philo->next = NULL;
 	if (philo_start != NULL)

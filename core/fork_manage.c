@@ -32,16 +32,13 @@ void	fork_r(t_philo *philo)
 		philo_next = philo->start;
 	else
 		philo_next = philo->next;
-
 	pthread_mutex_lock(&philo_next->fork_mutex);
-
 	if (philo_next->fork == 0 && philo->base->died == 0)
 	{
 		message(philo, 1, timestamp());
 		philo_next->fork = 1;
 		philo->nbr_fork = philo->nbr_fork + 1;
 	}
-
 	pthread_mutex_unlock(&philo_next->fork_mutex);
 }
 

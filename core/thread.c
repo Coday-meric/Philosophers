@@ -16,7 +16,6 @@ static void	got_to_sleep(t_philo *philo)
 {
 	if (philo->base->died == 1)
 		return ;
-	philo->state = 2;
 	message(philo, 3, timestamp());
 	improve_usleep(philo->base->time_sleep, philo->base);
 }
@@ -25,13 +24,11 @@ static void	got_to_think(t_philo *philo)
 {
 	if (philo->base->died == 1)
 		return ;
-	philo->state = 3;
 	message(philo, 4, timestamp());
 }
 
 static void	go_to_eat(t_philo *philo)
 {
-	philo->state = 1;
 	philo->nbr_eat = philo->nbr_eat + 1;
 	message(philo, 2, timestamp());
 	philo->last_eat = timestamp();
@@ -45,7 +42,7 @@ void	*thread_routine(void *data)
 	philo = (t_philo *)data;
 	philo->pid = pthread_self();
 	if (philo->num_philo % 2 == 0)
-		usleep(15000);
+		usleep(5000);
 	while (philo->base->died == 0)
 	{
 		fork_l(philo);

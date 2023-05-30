@@ -39,7 +39,6 @@ typedef struct s_philo
 	int				num_philo;
 	int				fork;
 	int				nbr_fork;
-	int				state;
 	t_base			*base;
 	struct s_philo	*start;
 	struct s_philo	*next;
