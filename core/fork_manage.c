@@ -39,7 +39,7 @@ void	fork_r(t_philo *philo)
 		pthread_mutex_unlock(&philo->base->die_mutex);
 		return ;
 	}
-	pthread_mutex_unlock(&philo_next->fork_mutex);
+	pthread_mutex_unlock(&philo->base->die_mutex);
 
 	pthread_mutex_lock(&philo_next->fork_mutex);
 	if (philo_next->fork == 0)
@@ -52,7 +52,6 @@ void	fork_r(t_philo *philo)
 		pthread_mutex_unlock(&philo_next->fork_mutex);
 		return ;
 	}
-
 	pthread_mutex_unlock(&philo_next->fork_mutex);
 
 	pthread_mutex_lock(&philo->fork_mutex);
