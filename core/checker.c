@@ -51,16 +51,28 @@ int	check_final(t_philo *philo, t_base *base)
 	while (philo_loc)
 	{
 		if (check_die(philo) == 0)
-			return (base->died = 1, 0);
+		{
+			pthread_mutex_lock(&base->die_mutex);
+			base->died = 1;
+			pthread_mutex_unlock(&base->die_mutex);
+			return (0);
+		}
+		pthread_mutex_lock(&philo_loc->nbr_eat_mutex);
 		if (base->nbr_max_eat != -1)
 			if (philo_loc->nbr_eat >= base->nbr_max_eat)
 				i++;
+		pthread_mutex_unlock(&philo_loc->nbr_eat_mutex);
 		philo_loc = philo_loc->next;
 	}
 	if (base->nbr_max_eat != -1)
 	{
 		if (i == base->nbr_philo)
-			return (base->died = 1, 0);
+		{
+			pthread_mutex_lock(&base->die_mutex);
+			base->died = 1;
+			pthread_mutex_unlock(&base->die_mutex);
+			return (0);
+		}
 	}
 	return (1);
 }
