@@ -35,6 +35,7 @@ typedef struct s_philo
 {
 	pthread_mutex_t	fork_mutex;
 	pthread_mutex_t	last_eat_mutex;
+	pthread_mutex_t	nbr_eat_mutex;
 	pthread_t		pid;
 	long int		last_eat;
 	int				nbr_eat;

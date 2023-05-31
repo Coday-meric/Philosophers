@@ -18,6 +18,7 @@ void	create_thread(t_philo *philo)
 	{
 		pthread_mutex_init(&philo->fork_mutex, NULL);
 		pthread_mutex_init(&philo->last_eat_mutex, NULL);
+		pthread_mutex_init(&philo->nbr_eat_mutex, NULL);
 		philo->last_eat = timestamp();
 		pthread_create(&philo->pid, NULL, thread_routine, philo);
 		philo = philo->next;

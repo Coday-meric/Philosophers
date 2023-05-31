@@ -29,9 +29,13 @@ static void	got_to_think(t_philo *philo)
 
 static void	go_to_eat(t_philo *philo)
 {
+	pthread_mutex_lock(&philo->nbr_eat_mutex);
 	philo->nbr_eat = philo->nbr_eat + 1;
+	pthread_mutex_unlock(&philo->nbr_eat_mutex);
 	message(philo, 2, timestamp());
+	pthread_mutex_lock(&philo->last_eat_mutex);
 	philo->last_eat = timestamp();
+	pthread_mutex_unlock(&philo->last_eat_mutex);
 	improve_usleep(philo->base->time_eat, philo->base);
 }
 
