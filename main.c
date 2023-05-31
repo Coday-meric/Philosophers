@@ -82,6 +82,7 @@ int	main(int argc, char **argv)
 		add_thread(base, philo, philo_start, i + 1);
 		i++;
 	}
+	create_thread(philo_start);
 	while (check_final(philo_start, base) == 1 && check_die(philo) == 1)
 		usleep(1000);
 	clean(base, philo_start);

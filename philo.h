@@ -53,6 +53,7 @@ void	fork_l_out(t_philo *philo);
 void	fork_r_out(t_philo *philo);
 void	fork_r(t_philo *philo);
 void	fork_l(t_philo *philo);
+void	create_thread(t_philo *philo);
 t_philo	*new_thread(t_base *base, t_philo *philo_start, int nbr);
 
 //MAIN
