@@ -33,9 +33,9 @@ int	check_die(t_philo *philo)
 	long int		time;
 
 	time = timestamp();
-	pthread_mutex_lock(&philo->fork_mutex);
+	pthread_mutex_lock(&philo->last_eat_mutex);
 	diff = time - philo->last_eat;
-	pthread_mutex_unlock(&philo->fork_mutex);
+	pthread_mutex_unlock(&philo->last_eat_mutex);
 	if (diff > (philo->base->time_die))
 		return (message(philo, 5, time), 0);
 	return (1);
