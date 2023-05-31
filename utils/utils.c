@@ -25,8 +25,17 @@ void	improve_usleep(long int time, t_base *base)
 	long int	i;
 
 	i = timestamp();
-	while (base->died == 0)
+	while (1)
 	{
+
+		pthread_mutex_lock(&base->die_mutex);
+		if (base->died == 1)
+		{
+			pthread_mutex_unlock(&base->die_mutex);
+			break ;
+		}
+		pthread_mutex_unlock(&base->die_mutex);
+
 		if (timestamp() - i >= time)
 			break ;
 		usleep(250);

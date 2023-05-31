@@ -19,7 +19,15 @@ void	create_thread(t_philo *philo)
 		pthread_mutex_init(&philo->fork_mutex, NULL);
 		pthread_mutex_init(&philo->last_eat_mutex, NULL);
 		pthread_mutex_init(&philo->nbr_eat_mutex, NULL);
+
+		pthread_mutex_lock(&philo->last_eat_mutex);
 		philo->last_eat = timestamp();
+		pthread_mutex_unlock(&philo->last_eat_mutex);
+
+		pthread_mutex_lock(&philo->fork_mutex);
+		philo->fork = 0;
+		pthread_mutex_unlock(&philo->fork_mutex);
+
 		pthread_create(&philo->pid, NULL, thread_routine, philo);
 		philo = philo->next;
 	}
@@ -32,7 +40,6 @@ t_philo	*new_thread(t_base *base, t_philo *philo_start, int nbr)
 	philo = ft_calloc(1, sizeof(t_philo));
 	philo->num_philo = nbr;
 	philo->base = base;
-	philo->fork = 0;
 	philo->next = NULL;
 	if (philo_start != NULL)
 		philo->start = philo_start;
