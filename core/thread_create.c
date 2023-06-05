@@ -16,10 +16,6 @@ void	create_thread(t_philo *philo)
 {
 	while (philo)
 	{
-		pthread_mutex_init(&philo->fork_mutex, NULL);
-		pthread_mutex_init(&philo->last_eat_mutex, NULL);
-		pthread_mutex_init(&philo->nbr_eat_mutex, NULL);
-
 		pthread_mutex_lock(&philo->last_eat_mutex);
 		philo->last_eat = timestamp();
 		pthread_mutex_unlock(&philo->last_eat_mutex);
@@ -38,6 +34,10 @@ t_philo	*new_thread(t_base *base, t_philo *philo_start, int nbr)
 	t_philo			*philo;
 
 	philo = ft_calloc(1, sizeof(t_philo));
+	pthread_mutex_init(&philo->fork_mutex, NULL);
+	pthread_mutex_init(&philo->last_eat_mutex, NULL);
+	pthread_mutex_init(&philo->nbr_eat_mutex, NULL);
+	pthread_mutex_init(&philo->nbr_fork_mutex, NULL);
 	philo->num_philo = nbr;
 	philo->base = base;
 	philo->next = NULL;
