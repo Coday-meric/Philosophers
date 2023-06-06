@@ -65,10 +65,11 @@ void	message(t_philo *philo, int code, long int time);
 
 //UTILS
 
-int		ft_atoi(const char *nptr);
+
 int		ft_isdigit(int c);
 int		check_final(t_philo *philo, t_base *base);
 int		check_die(t_philo *philo);
+int		check_if_die(t_philo *philo);
 void	ft_putstr_fd(char *s, int fd);
 void	ft_putnbr_fd(int n, int fd);
 void	ft_putchar_fd(char c, int fd);
@@ -76,5 +77,7 @@ void	ft_bzero(void *s, size_t n);
 void	*ft_calloc(size_t ec, size_t es);
 void	improve_usleep(long int time, t_base *base);
 long	timestamp(void);
+
+long long	ft_atoi(const char *nptr);
 
 #endif //PHILO_H

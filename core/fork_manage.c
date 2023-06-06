@@ -14,14 +14,8 @@
 
 void	fork_l(t_philo *philo)
 {
-	pthread_mutex_lock(&philo->base->die_mutex);
-	if (philo->base->died == 1)
-	{
-		pthread_mutex_unlock(&philo->base->die_mutex);
+	if (check_if_die(philo) == 1)
 		return ;
-	}
-	pthread_mutex_unlock(&philo->base->die_mutex);
-
 	pthread_mutex_lock(&philo->fork_mutex);
 	if (philo->fork == 0)
 	{
@@ -34,7 +28,6 @@ void	fork_l(t_philo *philo)
 		return ;
 	}
 	pthread_mutex_unlock(&philo->fork_mutex);
-
 	pthread_mutex_lock(&philo->nbr_fork_mutex);
 	philo->nbr_fork = philo->nbr_fork + 1;
 	pthread_mutex_unlock(&philo->nbr_fork_mutex);
@@ -48,15 +41,8 @@ void	fork_r(t_philo *philo)
 		philo_next = philo->start;
 	else
 		philo_next = philo->next;
-
-	pthread_mutex_lock(&philo->base->die_mutex);
-	if (philo->base->died == 1)
-	{
-		pthread_mutex_unlock(&philo->base->die_mutex);
+	if (check_if_die(philo) == 1)
 		return ;
-	}
-	pthread_mutex_unlock(&philo->base->die_mutex);
-
 	pthread_mutex_lock(&philo_next->fork_mutex);
 	if (philo_next->fork == 0)
 	{
@@ -69,7 +55,6 @@ void	fork_r(t_philo *philo)
 		return ;
 	}
 	pthread_mutex_unlock(&philo_next->fork_mutex);
-
 	pthread_mutex_lock(&philo->nbr_fork_mutex);
 	philo->nbr_fork = philo->nbr_fork + 1;
 	pthread_mutex_unlock(&philo->nbr_fork_mutex);
@@ -92,7 +77,6 @@ void	fork_r_out(t_philo *philo)
 		return ;
 	}
 	pthread_mutex_unlock(&philo_next->fork_mutex);
-
 	pthread_mutex_lock(&philo->nbr_fork_mutex);
 	philo->nbr_fork = philo->nbr_fork - 1;
 	pthread_mutex_unlock(&philo->nbr_fork_mutex);
@@ -109,7 +93,6 @@ void	fork_l_out(t_philo *philo)
 		return ;
 	}
 	pthread_mutex_unlock(&philo->fork_mutex);
-
 	pthread_mutex_lock(&philo->nbr_fork_mutex);
 	philo->nbr_fork = philo->nbr_fork - 1;
 	pthread_mutex_unlock(&philo->nbr_fork_mutex);

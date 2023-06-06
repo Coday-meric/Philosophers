@@ -12,7 +12,7 @@
 
 #include "../philo.h"
 
-int	ft_atoi(const char *nptr)
+long long	ft_atoi(const char *nptr)
 {
 	int	i;
 	int	res;
@@ -29,8 +29,10 @@ int	ft_atoi(const char *nptr)
 			signe = -1;
 		i++;
 	}
-	while (ft_isdigit(nptr[i]))
+	while (nptr[i])
 	{
+		if (!ft_isdigit(nptr[i]))
+			return (2147483649);
 		res = (res * 10) + (nptr[i] - 48);
 		i++;
 	}

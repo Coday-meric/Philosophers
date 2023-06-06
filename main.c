@@ -16,6 +16,8 @@ void	error(t_base *base, int code)
 {
 	if (code == -1)
 		printf("Nombre d'argument incorrect !\n");
+	if (code == -2)
+		printf("Argument incorrect !\n");
 }
 
 void	message(t_philo *philo, int code, long int time)
@@ -60,6 +62,14 @@ void	clean(t_base *base, t_philo *philo_start)
 	free(base);
 }
 
+static void	init_base(t_base *base)
+{
+	pthread_mutex_init(&base->print_mutex, NULL);
+	pthread_mutex_init(&base->die_mutex, NULL);
+	base->died = 0;
+	base->time_start = timestamp();
+}
+
 int	main(int argc, char **argv)
 {
 	t_philo		*philo;
@@ -70,11 +80,8 @@ int	main(int argc, char **argv)
 	i = 1;
 	base = ft_calloc(1, sizeof(t_base));
 	if (check_args(base, argc, argv) == 0)
-		return (0);
-	pthread_mutex_init(&base->print_mutex, NULL);
-	pthread_mutex_init(&base->die_mutex, NULL);
-	base->died = 0;
-	base->time_start = timestamp();
+		return (free(base), 0);
+	init_base(base);
 	philo = new_thread(base, NULL, 1);
 	philo_start = philo;
 	while (i < base->nbr_philo)
@@ -83,9 +90,9 @@ int	main(int argc, char **argv)
 		i++;
 	}
 	create_thread(philo_start);
-	usleep(1000);
+	usleep(50);
 	while (check_final(philo_start, base) == 1 && check_die(philo) == 1)
-		usleep(1000);
+		usleep(500);
 	clean(base, philo_start);
 	return (1);
 }

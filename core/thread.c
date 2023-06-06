@@ -21,7 +21,6 @@ static void	got_to_sleep(t_philo *philo)
 		return ;
 	}
 	pthread_mutex_unlock(&philo->base->die_mutex);
-
 	message(philo, 3, timestamp());
 	improve_usleep(philo->base->time_sleep, philo->base);
 }
@@ -35,7 +34,6 @@ static void	got_to_think(t_philo *philo)
 		return ;
 	}
 	pthread_mutex_unlock(&philo->base->die_mutex);
-
 	message(philo, 4, timestamp());
 }
 
@@ -44,14 +42,20 @@ static void	go_to_eat(t_philo *philo)
 	pthread_mutex_lock(&philo->nbr_eat_mutex);
 	philo->nbr_eat = philo->nbr_eat + 1;
 	pthread_mutex_unlock(&philo->nbr_eat_mutex);
-
 	message(philo, 2, timestamp());
-
 	pthread_mutex_lock(&philo->last_eat_mutex);
 	philo->last_eat = timestamp();
 	pthread_mutex_unlock(&philo->last_eat_mutex);
-
 	improve_usleep(philo->base->time_eat, philo->base);
+}
+
+static void	routine_chain(t_philo *philo)
+{
+	go_to_eat(philo);
+	fork_l_out(philo);
+	fork_r_out(philo);
+	got_to_sleep(philo);
+	got_to_think(philo);
 }
 
 void	*thread_routine(void *data)
@@ -64,26 +68,15 @@ void	*thread_routine(void *data)
 		usleep(5000);
 	while (1)
 	{
-		pthread_mutex_lock(&philo->base->die_mutex);
-		if (philo->base->died == 1)
-		{
-			pthread_mutex_unlock(&philo->base->die_mutex);
+		if (check_if_die(philo) == 1)
 			break ;
-		}
-		pthread_mutex_unlock(&philo->base->die_mutex);
-
 		fork_l(philo);
 		fork_r(philo);
-
 		pthread_mutex_lock(&philo->nbr_fork_mutex);
 		if (philo->nbr_fork == 2)
 		{
 			pthread_mutex_unlock(&philo->nbr_fork_mutex);
-			go_to_eat(philo);
-			fork_l_out(philo);
-			fork_r_out(philo);
-			got_to_sleep(philo);
-			got_to_think(philo);
+			routine_chain(philo);
 		}
 		else
 			pthread_mutex_unlock(&philo->nbr_fork_mutex);

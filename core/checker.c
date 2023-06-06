@@ -12,16 +12,44 @@
 
 #include "../philo.h"
 
+static int	check_args2(t_base *base, char **argv)
+{
+	long long	tmp;
+
+	tmp = ft_atoi(argv[1]);
+	if (tmp == 2147483649)
+		return (error(base, -2), 0);
+	base->nbr_philo = tmp;
+	tmp = ft_atoi(argv[2]);
+	if (tmp == 2147483649)
+		return (error(base, -2), 0);
+	base->time_die = tmp;
+	tmp = ft_atoi(argv[3]);
+	if (tmp == 2147483649)
+		return (error(base, -2), 0);
+	base->time_eat = tmp;
+	return (1);
+}
+
 int	check_args(t_base *base, int argc, char **argv)
 {
+	long long	tmp;
+
 	if (argc < 5)
 		return (error(base, -1), 0);
-	base->nbr_philo = ft_atoi(argv[1]);
-	base->time_die = ft_atoi(argv[2]);
-	base->time_eat = ft_atoi(argv[3]);
-	base->time_sleep = ft_atoi(argv[4]);
+	if (check_args2(base, argv) == 0)
+		return (0);
+	tmp = ft_atoi(argv[4]);
+	if (tmp == 2147483649)
+		return (error(base, -2), 0);
+	base->time_sleep = tmp;
 	if (argc == 6)
-		base->nbr_max_eat = ft_atoi(argv[5]);
+	{
+		tmp = ft_atoi(argv[5]);
+		if (tmp == 2147483649)
+			return (error(base, -2), 0);
+		base->nbr_max_eat = tmp;
+	}
 	else
 		base->nbr_max_eat = -1;
 	return (1);
@@ -38,6 +66,21 @@ int	check_die(t_philo *philo)
 	pthread_mutex_unlock(&philo->last_eat_mutex);
 	if (diff > (philo->base->time_die))
 		return (message(philo, 5, time), 0);
+	return (1);
+}
+
+static int	check_nbr_philo_eat(t_base *base, int i)
+{
+	if (base->nbr_max_eat != -1)
+	{
+		if (i == base->nbr_philo)
+		{
+			pthread_mutex_lock(&base->die_mutex);
+			base->died = 1;
+			pthread_mutex_unlock(&base->die_mutex);
+			return (0);
+		}
+	}
 	return (1);
 }
 
@@ -64,15 +107,7 @@ int	check_final(t_philo *philo, t_base *base)
 		pthread_mutex_unlock(&philo_loc->nbr_eat_mutex);
 		philo_loc = philo_loc->next;
 	}
-	if (base->nbr_max_eat != -1)
-	{
-		if (i == base->nbr_philo)
-		{
-			pthread_mutex_lock(&base->die_mutex);
-			base->died = 1;
-			pthread_mutex_unlock(&base->die_mutex);
-			return (0);
-		}
-	}
+	if (check_nbr_philo_eat(base, i) == 0)
+		return (0);
 	return (1);
 }
