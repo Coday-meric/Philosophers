@@ -35,7 +35,7 @@ int	check_args(t_base *base, int argc, char **argv)
 {
 	long long	tmp;
 
-	if (argc < 5)
+	if (argc < 5 || argc > 6)
 		return (error(base, -1), 0);
 	if (check_args2(base, argv) == 0)
 		return (0);
