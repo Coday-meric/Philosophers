@@ -36,7 +36,7 @@ void	improve_usleep(long int time, t_base *base)
 		pthread_mutex_unlock(&base->die_mutex);
 		if (timestamp() - i >= time)
 			break ;
-		usleep(250);
+		usleep(500);
 	}
 }
 

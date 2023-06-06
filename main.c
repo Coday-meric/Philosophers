@@ -92,7 +92,7 @@ int	main(int argc, char **argv)
 	create_thread(philo_start);
 	usleep(50);
 	while (check_final(philo_start, base) == 1 && check_die(philo) == 1)
-		usleep(500);
+		usleep(1000);
 	clean(base, philo_start);
 	return (1);
 }
