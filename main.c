@@ -25,16 +25,16 @@ void	message(t_philo *philo, int code, long int time)
 	pthread_mutex_lock(&philo->base->print_mutex);
 	if (code == 1)
 		printf("%lu %d has taken a fork\n"\
-		, (time - philo->base->time_start), philo->num_philo);
+		, (timestamp() - philo->base->time_start), philo->num_philo);
 	else if (code == 2)
 		printf("\033[32;1m%lu %d is eating\n\033[0m"\
-		, (time - philo->base->time_start), philo->num_philo);
+		, (timestamp() - philo->base->time_start), philo->num_philo);
 	else if (code == 3)
 		printf("\033[34;1m%lu %d is sleeping\n\033[0m"\
-		, (time - philo->base->time_start), philo->num_philo);
+		, (timestamp() - philo->base->time_start), philo->num_philo);
 	else if (code == 4)
 		printf("\033[33;1m%lu %d is thinking\n\033[0m"\
-		, (time - philo->base->time_start), philo->num_philo);
+		, (timestamp() - philo->base->time_start), philo->num_philo);
 	else if (code == 5)
 		printf("\033[31;1m%lu %d died\n\033[0m"\
 		, (time - philo->base->time_start), philo->num_philo);

@@ -19,7 +19,7 @@ void	fork_l(t_philo *philo)
 	pthread_mutex_lock(&philo->fork_mutex);
 	if (philo->fork == 0)
 	{
-		message(philo, 1, timestamp());
+		message(philo, 1, 0);
 		philo->fork = 1;
 	}
 	else
@@ -46,7 +46,7 @@ void	fork_r(t_philo *philo)
 	pthread_mutex_lock(&philo_next->fork_mutex);
 	if (philo_next->fork == 0)
 	{
-		message(philo, 1, timestamp());
+		message(philo, 1, 0);
 		philo_next->fork = 1;
 	}
 	else

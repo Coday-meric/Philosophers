@@ -65,7 +65,14 @@ int	check_die(t_philo *philo)
 	diff = time - philo->last_eat;
 	pthread_mutex_unlock(&philo->last_eat_mutex);
 	if (diff > (philo->base->time_die))
+	{
+		pthread_mutex_lock(&philo->base->die_mutex);
+		philo->base->died = 1;
+		pthread_mutex_unlock(&philo->base->die_mutex);
+		time = timestamp() + 1;
+		usleep(2000);
 		return (message(philo, 5, time), 0);
+	}
 	return (1);
 }
 
@@ -94,12 +101,7 @@ int	check_final(t_philo *philo, t_base *base)
 	while (philo_loc)
 	{
 		if (check_die(philo) == 0)
-		{
-			pthread_mutex_lock(&base->die_mutex);
-			base->died = 1;
-			pthread_mutex_unlock(&base->die_mutex);
 			return (0);
-		}
 		pthread_mutex_lock(&philo_loc->nbr_eat_mutex);
 		if (base->nbr_max_eat != -1)
 			if (philo_loc->nbr_eat >= base->nbr_max_eat)
